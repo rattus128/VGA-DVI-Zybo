@@ -1,0 +1,7 @@
+connect
+target 1
+rst
+fpga -f golden.bit
+target 2
+dow arm_sw.elf
+con
