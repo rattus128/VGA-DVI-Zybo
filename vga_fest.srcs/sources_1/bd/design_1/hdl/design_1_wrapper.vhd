@@ -1,7 +1,7 @@
 --Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2018.3 (lin64) Build 2405991 Thu Dec  6 23:36:41 MST 2018
---Date        : Thu Apr  9 02:53:25 2020
+--Date        : Thu Apr  9 22:15:48 2020
 --Host        : rattus-All-Series running 64-bit Ubuntu 18.04.1 LTS
 --Command     : generate_target design_1_wrapper.bd
 --Design      : design_1_wrapper
@@ -45,6 +45,11 @@ entity design_1_wrapper is
     hdmi_d_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
     hsync : in STD_LOGIC;
     r : in STD_LOGIC_VECTOR ( 6 downto 0 );
+    vga_b : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_g : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    vga_hs : out STD_LOGIC;
+    vga_r : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_vs : out STD_LOGIC;
     vsync : in STD_LOGIC
   );
 end design_1_wrapper;
@@ -64,6 +69,11 @@ architecture STRUCTURE of design_1_wrapper is
     hdmi_clk_n : out STD_LOGIC;
     hdmi_d_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
     hdmi_d_n : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    vga_r : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_g : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    vga_b : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_hs : out STD_LOGIC;
+    vga_vs : out STD_LOGIC;
     DDR_cas_n : inout STD_LOGIC;
     DDR_cke : inout STD_LOGIC;
     DDR_ck_n : inout STD_LOGIC;
@@ -122,6 +132,11 @@ design_1_i: component design_1
       hdmi_d_p(2 downto 0) => hdmi_d_p(2 downto 0),
       hsync => hsync,
       r(6 downto 0) => r(6 downto 0),
+      vga_b(4 downto 0) => vga_b(4 downto 0),
+      vga_g(5 downto 0) => vga_g(5 downto 0),
+      vga_hs => vga_hs,
+      vga_r(4 downto 0) => vga_r(4 downto 0),
+      vga_vs => vga_vs,
       vsync => vsync
     );
 end STRUCTURE;

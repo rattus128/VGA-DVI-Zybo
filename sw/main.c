@@ -114,8 +114,9 @@ int main(void)
         debug_var("%f", line_length);
 
         for (i = 0; i < PIXELS; i++) {
+            double fudge = 0.205;
             /* every second pixel */
-            d->program_line[i] = (H_BACK_PORCH + 0.0 + i * 2) *
+            d->program_line[i] = (H_BACK_PORCH + fudge + i * 2) *
                                  line_length / H_TOTAL;
         }
     }

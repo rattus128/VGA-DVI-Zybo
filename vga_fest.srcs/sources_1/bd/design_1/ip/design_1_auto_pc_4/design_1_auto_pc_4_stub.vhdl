@@ -1,7 +1,7 @@
 -- Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2018.3 (lin64) Build 2405991 Thu Dec  6 23:36:41 MST 2018
--- Date        : Thu Apr  9 02:32:00 2020
+-- Date        : Thu Apr  9 22:32:43 2020
 -- Host        : rattus-All-Series running 64-bit Ubuntu 18.04.1 LTS
 -- Command     : write_vhdl -force -mode synth_stub -rename_top design_1_auto_pc_4 -prefix
 --               design_1_auto_pc_4_ design_1_auto_pc_1_stub.vhdl

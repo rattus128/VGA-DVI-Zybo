@@ -180,6 +180,11 @@ proc create_root_design { parentCell } {
   set hdmi_d_p [ create_bd_port -dir O -from 2 -to 0 hdmi_d_p ]
   set hsync [ create_bd_port -dir I hsync ]
   set r [ create_bd_port -dir I -from 6 -to 0 r ]
+  set vga_b [ create_bd_port -dir O -from 4 -to 0 vga_b ]
+  set vga_g [ create_bd_port -dir O -from 5 -to 0 vga_g ]
+  set vga_hs [ create_bd_port -dir O vga_hs ]
+  set vga_r [ create_bd_port -dir O -from 4 -to 0 vga_r ]
+  set vga_vs [ create_bd_port -dir O vga_vs ]
   set vsync [ create_bd_port -dir I vsync ]
 
   # Create instance: axi_dma_0, and set properties
@@ -1064,6 +1069,9 @@ proc create_root_design { parentCell } {
    CONFIG.kRstActiveHigh {false} \
  ] $rgb2dvi_0
 
+  # Create instance: rgb2vga_0, and set properties
+  set rgb2vga_0 [ create_bd_cell -type ip -vlnv digilentinc.com:ip:rgb2vga:1.0 rgb2vga_0 ]
+
   # Create instance: rgb_gen_1, and set properties
   set rgb_gen_1 [ create_bd_cell -type ip -vlnv user.org:user:rgb_gen:1.0 rgb_gen_1 ]
 
@@ -1132,7 +1140,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_interconnect_0_M03_AXI] [get
   connect_bd_net -net In1_0_1 [get_bd_ports r] [get_bd_pins xlconcat_0/In1]
   connect_bd_net -net b_1 [get_bd_ports b] [get_bd_pins xlconcat_1/In1]
   connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_pins clk_wiz_0/clk_out2] [get_bd_pins rgb2dvi_0/SerialClk]
-  connect_bd_net -net clk_wiz_0_clk_out3 [get_bd_ports clk_b] [get_bd_ports clk_g] [get_bd_ports clk_r] [get_bd_pins axis_data_fifo_0/s_axis_aclk] [get_bd_pins axis_data_fifo_1/m_axis_aclk] [get_bd_pins axis_data_fifo_2/m_axis_aclk] [get_bd_pins clk_wiz_0/clk_out3] [get_bd_pins ila_0/clk] [get_bd_pins rgb2dvi_0/PixelClk] [get_bd_pins rgb_gen_1/s00_axis_aclk] [get_bd_pins rst_ps7_0_100M/slowest_sync_clk] [get_bd_pins vga_sampler_0/mpixel_axis_aclk] [get_bd_pins vga_sampler_0/stiming_axis_aclk]
+  connect_bd_net -net clk_wiz_0_clk_out3 [get_bd_ports clk_b] [get_bd_ports clk_g] [get_bd_ports clk_r] [get_bd_pins axis_data_fifo_0/s_axis_aclk] [get_bd_pins axis_data_fifo_1/m_axis_aclk] [get_bd_pins axis_data_fifo_2/m_axis_aclk] [get_bd_pins clk_wiz_0/clk_out3] [get_bd_pins ila_0/clk] [get_bd_pins rgb2dvi_0/PixelClk] [get_bd_pins rgb2vga_0/PixelClk] [get_bd_pins rgb_gen_1/s00_axis_aclk] [get_bd_pins rst_ps7_0_100M/slowest_sync_clk] [get_bd_pins vga_sampler_0/mpixel_axis_aclk] [get_bd_pins vga_sampler_0/stiming_axis_aclk]
   connect_bd_net -net g_1 [get_bd_ports g] [get_bd_pins xlconcat_2/In1]
   connect_bd_net -net hsync_0_1 [get_bd_ports hsync] [get_bd_pins axi_timer_0/capturetrig0] [get_bd_pins ila_0/probe1] [get_bd_pins vga_sampler_0/hsync]
   connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_dma_0/m_axi_mm2s_aclk] [get_bd_pins axi_dma_0/m_axi_sg_aclk] [get_bd_pins axi_dma_0/s_axi_lite_aclk] [get_bd_pins axi_dma_1/m_axi_s2mm_aclk] [get_bd_pins axi_dma_1/m_axi_sg_aclk] [get_bd_pins axi_dma_1/s_axi_lite_aclk] [get_bd_pins axi_dma_2/m_axi_mm2s_aclk] [get_bd_pins axi_dma_2/s_axi_lite_aclk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_interconnect_0/M02_ACLK] [get_bd_pins axi_interconnect_0/M03_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins axi_interconnect_1/ACLK] [get_bd_pins axi_interconnect_1/M00_ACLK] [get_bd_pins axi_interconnect_1/S00_ACLK] [get_bd_pins axi_interconnect_2/ACLK] [get_bd_pins axi_interconnect_2/M00_ACLK] [get_bd_pins axi_interconnect_2/S00_ACLK] [get_bd_pins axi_interconnect_2/S01_ACLK] [get_bd_pins axi_interconnect_3/ACLK] [get_bd_pins axi_interconnect_3/M00_ACLK] [get_bd_pins axi_interconnect_3/S00_ACLK] [get_bd_pins axi_interconnect_4/ACLK] [get_bd_pins axi_interconnect_4/M00_ACLK] [get_bd_pins axi_interconnect_4/S00_ACLK] [get_bd_pins axi_timer_0/s_axi_aclk] [get_bd_pins axis_data_fifo_0/m_axis_aclk] [get_bd_pins axis_data_fifo_1/s_axis_aclk] [get_bd_pins axis_data_fifo_2/s_axis_aclk] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins ila_1/clk] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins processing_system7_0/S_AXI_HP0_ACLK] [get_bd_pins processing_system7_0/S_AXI_HP1_ACLK] [get_bd_pins processing_system7_0/S_AXI_HP2_ACLK] [get_bd_pins processing_system7_0/S_AXI_HP3_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
@@ -1142,10 +1150,15 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_interconnect_0_M03_AXI] [get
   connect_bd_net -net rgb2dvi_0_TMDS_Clk_p [get_bd_ports hdmi_clk_p] [get_bd_pins rgb2dvi_0/TMDS_Clk_p]
   connect_bd_net -net rgb2dvi_0_TMDS_Data_n [get_bd_ports hdmi_d_n] [get_bd_pins rgb2dvi_0/TMDS_Data_n]
   connect_bd_net -net rgb2dvi_0_TMDS_Data_p [get_bd_ports hdmi_d_p] [get_bd_pins rgb2dvi_0/TMDS_Data_p]
-  connect_bd_net -net rgb_gen_0_hsync [get_bd_pins rgb2dvi_0/vid_pHSync] [get_bd_pins rgb_gen_1/hsync]
-  connect_bd_net -net rgb_gen_0_vde [get_bd_pins rgb2dvi_0/vid_pVDE] [get_bd_pins rgb_gen_1/vde]
-  connect_bd_net -net rgb_gen_0_vsync [get_bd_pins rgb2dvi_0/vid_pVSync] [get_bd_pins rgb_gen_1/vsync]
-  connect_bd_net -net rgb_gen_1_rgb [get_bd_pins rgb2dvi_0/vid_pData] [get_bd_pins rgb_gen_1/rgb]
+  connect_bd_net -net rgb2vga_0_vga_pBlue [get_bd_ports vga_b] [get_bd_pins rgb2vga_0/vga_pBlue]
+  connect_bd_net -net rgb2vga_0_vga_pGreen [get_bd_ports vga_g] [get_bd_pins rgb2vga_0/vga_pGreen]
+  connect_bd_net -net rgb2vga_0_vga_pHSync [get_bd_ports vga_hs] [get_bd_pins rgb2vga_0/vga_pHSync]
+  connect_bd_net -net rgb2vga_0_vga_pRed [get_bd_ports vga_r] [get_bd_pins rgb2vga_0/vga_pRed]
+  connect_bd_net -net rgb2vga_0_vga_pVSync [get_bd_ports vga_vs] [get_bd_pins rgb2vga_0/vga_pVSync]
+  connect_bd_net -net rgb_gen_0_hsync [get_bd_pins rgb2dvi_0/vid_pHSync] [get_bd_pins rgb2vga_0/rgb_pHSync] [get_bd_pins rgb_gen_1/hsync]
+  connect_bd_net -net rgb_gen_0_vde [get_bd_pins rgb2dvi_0/vid_pVDE] [get_bd_pins rgb2vga_0/rgb_pVDE] [get_bd_pins rgb_gen_1/vde]
+  connect_bd_net -net rgb_gen_0_vsync [get_bd_pins rgb2dvi_0/vid_pVSync] [get_bd_pins rgb2vga_0/rgb_pVSync] [get_bd_pins rgb_gen_1/vsync]
+  connect_bd_net -net rgb_gen_1_rgb [get_bd_pins rgb2dvi_0/vid_pData] [get_bd_pins rgb2vga_0/rgb_pData] [get_bd_pins rgb_gen_1/rgb]
   connect_bd_net -net rst_ps7_0_100M_peripheral_aresetn [get_bd_pins axi_dma_1/axi_resetn] [get_bd_pins axi_dma_2/axi_resetn] [get_bd_pins axi_interconnect_0/M02_ARESETN] [get_bd_pins axi_interconnect_0/M03_ARESETN] [get_bd_pins axi_interconnect_3/ARESETN] [get_bd_pins axi_interconnect_3/M00_ARESETN] [get_bd_pins axi_interconnect_3/S00_ARESETN] [get_bd_pins axi_interconnect_4/ARESETN] [get_bd_pins axi_interconnect_4/M00_ARESETN] [get_bd_pins axi_interconnect_4/S00_ARESETN] [get_bd_pins axis_data_fifo_2/s_axis_aresetn] [get_bd_pins rgb2dvi_0/aRst_n] [get_bd_pins rgb_gen_1/s00_axis_aresetn] [get_bd_pins rst_ps7_0_100M/peripheral_aresetn]
   connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_dma_0/axi_resetn] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins axi_interconnect_1/ARESETN] [get_bd_pins axi_interconnect_1/M00_ARESETN] [get_bd_pins axi_interconnect_1/S00_ARESETN] [get_bd_pins axi_interconnect_2/ARESETN] [get_bd_pins axi_interconnect_2/M00_ARESETN] [get_bd_pins axi_interconnect_2/S00_ARESETN] [get_bd_pins axi_interconnect_2/S01_ARESETN] [get_bd_pins axi_timer_0/s_axi_aresetn] [get_bd_pins axis_data_fifo_0/s_axis_aresetn] [get_bd_pins axis_data_fifo_1/s_axis_aresetn] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn] [get_bd_pins vga_sampler_0/mpixel_axis_aresetn] [get_bd_pins vga_sampler_0/stiming_axis_aresetn]
   connect_bd_net -net vga_sampler_0_command [get_bd_pins ila_0/probe4] [get_bd_pins vga_sampler_0/command]

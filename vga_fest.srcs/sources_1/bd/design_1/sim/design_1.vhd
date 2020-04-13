@@ -1,7 +1,7 @@
 --Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2018.3 (lin64) Build 2405991 Thu Dec  6 23:36:41 MST 2018
---Date        : Thu Apr  9 02:53:25 2020
+--Date        : Thu Apr  9 22:15:48 2020
 --Host        : rattus-All-Series running 64-bit Ubuntu 18.04.1 LTS
 --Command     : generate_target design_1.bd
 --Design      : design_1
@@ -4853,10 +4853,15 @@ entity design_1 is
     hdmi_d_p : out STD_LOGIC_VECTOR ( 2 downto 0 );
     hsync : in STD_LOGIC;
     r : in STD_LOGIC_VECTOR ( 6 downto 0 );
+    vga_b : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_g : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    vga_hs : out STD_LOGIC;
+    vga_r : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_vs : out STD_LOGIC;
     vsync : in STD_LOGIC
   );
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=48,numReposBlks=32,numNonXlnxBlks=3,numHierBlks=16,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,da_board_cnt=2,da_clkrst_cnt=47,da_ps7_cnt=1,synth_mode=OOC_per_IP}";
+  attribute CORE_GENERATION_INFO of design_1 : entity is "design_1,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=design_1,x_ipVersion=1.00.a,x_ipLanguage=VHDL,numBlks=49,numReposBlks=33,numNonXlnxBlks=4,numHierBlks=16,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,da_board_cnt=2,da_clkrst_cnt=47,da_ps7_cnt=1,synth_mode=OOC_per_IP}";
   attribute HW_HANDOFF : string;
   attribute HW_HANDOFF of design_1 : entity is "design_1.hwdef";
 end design_1;
@@ -5532,6 +5537,20 @@ architecture STRUCTURE of design_1 is
     mpixel_axis_aresetn : in STD_LOGIC
   );
   end component design_1_vga_sampler_0_1;
+  component design_1_rgb2vga_0_0 is
+  port (
+    rgb_pData : in STD_LOGIC_VECTOR ( 23 downto 0 );
+    rgb_pVDE : in STD_LOGIC;
+    rgb_pHSync : in STD_LOGIC;
+    rgb_pVSync : in STD_LOGIC;
+    PixelClk : in STD_LOGIC;
+    vga_pRed : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_pGreen : out STD_LOGIC_VECTOR ( 5 downto 0 );
+    vga_pBlue : out STD_LOGIC_VECTOR ( 4 downto 0 );
+    vga_pHSync : out STD_LOGIC;
+    vga_pVSync : out STD_LOGIC
+  );
+  end component design_1_rgb2vga_0_0;
   signal In1_0_1 : STD_LOGIC_VECTOR ( 6 downto 0 );
   signal S00_AXI_1_AWADDR : STD_LOGIC_VECTOR ( 31 downto 0 );
   signal S00_AXI_1_AWBURST : STD_LOGIC_VECTOR ( 1 downto 0 );
@@ -5878,6 +5897,11 @@ architecture STRUCTURE of design_1 is
   signal rgb2dvi_0_TMDS_Clk_p : STD_LOGIC;
   signal rgb2dvi_0_TMDS_Data_n : STD_LOGIC_VECTOR ( 2 downto 0 );
   signal rgb2dvi_0_TMDS_Data_p : STD_LOGIC_VECTOR ( 2 downto 0 );
+  signal rgb2vga_0_vga_pBlue : STD_LOGIC_VECTOR ( 4 downto 0 );
+  signal rgb2vga_0_vga_pGreen : STD_LOGIC_VECTOR ( 5 downto 0 );
+  signal rgb2vga_0_vga_pHSync : STD_LOGIC;
+  signal rgb2vga_0_vga_pRed : STD_LOGIC_VECTOR ( 4 downto 0 );
+  signal rgb2vga_0_vga_pVSync : STD_LOGIC;
   signal rgb_gen_0_hsync : STD_LOGIC;
   signal rgb_gen_0_vde : STD_LOGIC;
   signal rgb_gen_0_vsync : STD_LOGIC;
@@ -6001,6 +6025,11 @@ begin
   hdmi_d_n(2 downto 0) <= rgb2dvi_0_TMDS_Data_n(2 downto 0);
   hdmi_d_p(2 downto 0) <= rgb2dvi_0_TMDS_Data_p(2 downto 0);
   hsync_0_1 <= hsync;
+  vga_b(4 downto 0) <= rgb2vga_0_vga_pBlue(4 downto 0);
+  vga_g(5 downto 0) <= rgb2vga_0_vga_pGreen(5 downto 0);
+  vga_hs <= rgb2vga_0_vga_pHSync;
+  vga_r(4 downto 0) <= rgb2vga_0_vga_pRed(4 downto 0);
+  vga_vs <= rgb2vga_0_vga_pVSync;
   vsync_0_1 <= vsync;
 axi_dma_0: component design_1_axi_dma_0_0
      port map (
@@ -6912,6 +6941,19 @@ rgb2dvi_0: component design_1_rgb2dvi_0_0
       vid_pHSync => rgb_gen_0_hsync,
       vid_pVDE => rgb_gen_0_vde,
       vid_pVSync => rgb_gen_0_vsync
+    );
+rgb2vga_0: component design_1_rgb2vga_0_0
+     port map (
+      PixelClk => clk_wiz_0_clk_out3,
+      rgb_pData(23 downto 0) => rgb_gen_1_rgb(23 downto 0),
+      rgb_pHSync => rgb_gen_0_hsync,
+      rgb_pVDE => rgb_gen_0_vde,
+      rgb_pVSync => rgb_gen_0_vsync,
+      vga_pBlue(4 downto 0) => rgb2vga_0_vga_pBlue(4 downto 0),
+      vga_pGreen(5 downto 0) => rgb2vga_0_vga_pGreen(5 downto 0),
+      vga_pHSync => rgb2vga_0_vga_pHSync,
+      vga_pRed(4 downto 0) => rgb2vga_0_vga_pRed(4 downto 0),
+      vga_pVSync => rgb2vga_0_vga_pVSync
     );
 rgb_gen_1: component design_1_rgb_gen_1_0
      port map (
